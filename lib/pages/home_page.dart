@@ -10,30 +10,26 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  List toDolist = [
+    ["Make bed", false],
+    ["Excersice", true],
+    ["Finish homework", true],
+  ];
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.yellow[200],
       appBar: AppBar(
         title: Text("TO DO"),
       ),
-      body: ListView(
-        children: [
-          TodoTile(
-            taskName: "Make bed",
-            taskCompleted: true,
-            onChanged: (p0) {},
-          ),
-          TodoTile(
-            taskName: "Read for an hours",
-            taskCompleted: true,
-            onChanged: (p0) {},
-          ),
-          TodoTile(
-            taskName: "Finish homework",
-            taskCompleted: false,
-            onChanged: (p0) {},
-          ),
-        ],
+      body: ListView.builder(
+        itemBuilder: (context, index) {
+          return TodoTile(
+            taskName: toDolist[index][0],
+            taskCompleted: toDolist[index][1],
+            onChange: (value) => checkBoxChanged,
+          );
+        },
       ),
     );
   }
