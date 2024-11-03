@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_app/util/dialog_box.dart';
 import 'package:to_do_app/util/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,9 +13,36 @@ class _HomePageState extends State<HomePage> {
   @override
   List toDolist = [
     ["Make bed", false],
-    ["Excersice", true],
-    ["Finish homework", true],
   ];
+
+  void saveNewTask() {
+    setState(() {
+      toDolist.add([_controller.text, false]);
+      _controller.clear();
+    });
+    Navigator.of(context).pop();
+  }
+
+  final _controller = TextEditingController();
+
+  void checkBoxChanged(bool? value, int index) {
+    setState(() {
+      toDolist[index][1] = value;
+    });
+  }
+
+  void createNewTask() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DialogBox(
+          onCancel: () => Navigator.of(context).pop(),
+          onSave: saveNewTask,
+          controllerh: _controller,
+        );
+      },
+    );
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,12 +50,18 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("TO DO"),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: createNewTask,
+        child: Icon(Icons.add_circle_sharp),
+        backgroundColor: Colors.yellow,
+      ),
       body: ListView.builder(
+        itemCount: toDolist.length,
         itemBuilder: (context, index) {
           return TodoTile(
             taskName: toDolist[index][0],
             taskCompleted: toDolist[index][1],
-            onChange: (value) => checkBoxChanged,
+            onChange: (value) => checkBoxChanged(value, index),
           );
         },
       ),
