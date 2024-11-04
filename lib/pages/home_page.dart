@@ -58,6 +58,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void deleteTask(int index) {
+    setState(() {
+      db.toDoList.removeAt(index);
+    });
+    db.updateDataBase();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.yellow[200],
@@ -68,6 +75,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: createNewTask,
         child: Icon(Icons.add_circle_sharp),
         backgroundColor: Colors.yellow,
+        disabledElevation: 0,
       ),
       body: ListView.builder(
         itemCount: db.toDoList.length,
@@ -76,6 +84,7 @@ class _HomePageState extends State<HomePage> {
             taskName: db.toDoList[index][0],
             taskCompleted: db.toDoList[index][1],
             onChange: (value) => checkBoxChanged(value, index),
+            deleteFunction: (context) => deleteTask,
           );
         },
       ),
