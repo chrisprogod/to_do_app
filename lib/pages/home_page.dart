@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:to_do_app/data/database.dart';
 import 'package:to_do_app/util/dialog_box.dart';
 import 'package:to_do_app/util/todo_tile.dart';
 
@@ -12,16 +13,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  final _mybox = Hive.openBox('myobx');
+  final _mybox = Hive.box('mybox');
+  ToDoDataBase db = ToDoDataBase();
 
-  List toDolist = [
-    ["Make bed", false],
-  ];
+  //check if theres data before initializing the app
+  void initState() {
+    //if its the first time ever openeing the app then show initial data
+    if (_mybox.get("TODOLIST") == null) {
+      db.createInitialData();
+    } else {
+      db.loadData();
+    }
+    super.initState();
+  }
 
   void saveNewTask() {
     setState(() {
-      toDolist.add([_controller.text, false]);
+      db.toDoList.add([_controller.text, false]);
       _controller.clear();
+      db.updateDataBase();
     });
     Navigator.of(context).pop();
   }
@@ -30,7 +40,8 @@ class _HomePageState extends State<HomePage> {
 
   void checkBoxChanged(bool? value, int index) {
     setState(() {
-      toDolist[index][1] = value;
+      db.toDoList[index][1] = value;
+      db.updateDataBase();
     });
   }
 
@@ -59,11 +70,11 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.yellow,
       ),
       body: ListView.builder(
-        itemCount: toDolist.length,
+        itemCount: db.toDoList.length,
         itemBuilder: (context, index) {
           return TodoTile(
-            taskName: toDolist[index][0],
-            taskCompleted: toDolist[index][1],
+            taskName: db.toDoList[index][0],
+            taskCompleted: db.toDoList[index][1],
             onChange: (value) => checkBoxChanged(value, index),
           );
         },
