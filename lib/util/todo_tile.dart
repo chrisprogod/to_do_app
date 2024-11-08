@@ -22,7 +22,7 @@ class TodoTile extends StatelessWidget {
       padding: const EdgeInsets.only(top: 27, left: 27, right: 27),
       child: Slidable(
         endActionPane: ActionPane(
-          motion: StretchMotion(),
+          motion: const StretchMotion(),
           children: [
             SlidableAction(
               onPressed: deleteFunction,
@@ -33,7 +33,7 @@ class TodoTile extends StatelessWidget {
           ],
         ),
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
               color: Colors.yellow, borderRadius: BorderRadius.circular(12)),
           child: Row(

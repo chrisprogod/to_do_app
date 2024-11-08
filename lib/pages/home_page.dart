@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> {
   ToDoDataBase db = ToDoDataBase();
 
   //check if theres data before initializing the app
+  @override
   void initState() {
     //if its the first time ever openeing the app then show initial data
     if (_mybox.get("TODOLIST") == null) {
@@ -65,17 +66,18 @@ class _HomePageState extends State<HomePage> {
     db.updateDataBase();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.yellow[200],
       appBar: AppBar(
-        title: Text("TO DO"),
+        title: const Text("TO DO"),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: createNewTask,
-        child: Icon(Icons.add_circle_sharp),
         backgroundColor: Colors.yellow,
         disabledElevation: 0,
+        child: Icon(Icons.add_circle_sharp),
       ),
       body: ListView.builder(
         itemCount: db.toDoList.length,
